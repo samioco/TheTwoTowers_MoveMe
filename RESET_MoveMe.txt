@@ -1,0 +1,6 @@
+//RESET_MoveMe#CLASS 0#AL RESET_MoveMe {#CLASS 0
+RESET_MoveMeSettings
+RESET_MoveMeArda
+RESET_MoveMeFarHarad
+RESET_MoveMeLairWalk
+#CLASS 0} _MoveMe#CLASS 0

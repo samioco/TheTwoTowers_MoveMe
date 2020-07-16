@@ -1,4 +1,4 @@
-#CLASS 0
+//RESET_MoveMeArda#CLASS 0#AL RESET_MoveMeArda {#CLASS 0
 $CLASS = "Tools|MoveMe|EXE"
 
 #AL MoveMe_To_WestArda {
@@ -111,4 +111,4 @@ ActionAdd "#T+ MoveMe|MinasTirithInside;#WALK MTIN"
 MoveMe_To_SouthArda
 } $CLASS
 
-#CLASS 0
+#CLASS 0} _MoveMe#CLASS 0

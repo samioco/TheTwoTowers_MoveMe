@@ -1,4 +1,4 @@
-#CLASS 0
+//RESET_MoveMeFarHarad#CLASS 0#AL RESET_MoveMeFarHarad {#CLASS 0
 $CLASS = "Tools|MoveMe|EXE"
 #VAR ROOMS_Tarzhayan_Well {"tarwell_inside|tarwell_bottom|rabban|rabban_tunnel|rabban_lizard|rabban_lizard|tarwell_sand"} {} VAR
 
@@ -8,7 +8,7 @@ $LastSP=%lower(@LastSP)
 #SW (%ismember($LastSP,%lower(@ROOMS_Signposts_WestArda_ID))) {
 ActionAdd "MoveMe_To_FH"
 MoveMe_To_Arda
-//If LastSP is Not FH AND Not Tarzhayan, Move Caravan TarCourt
+//If LastSP is Not FH AND Not Tarzhayan, Move Caravan TarCourt 
 } ((!%ismember($LastSP,%lower(@ROOMS_Signposts_FH_ID))) AND (!%pos("Tarzhayan",%zonename()))) {
 BotOn MoveMe;#T+ Caravan_Arrival;#WALK TarCourt
 //If LastSP is FH And Outpost Zone, Move TarCourt
@@ -39,4 +39,4 @@ ActionAdd "BotOn MoveMe;#T+ Tarwell_Arrival;#T+ Tarwell_DigOut;#WALK TarWell"
 ActionNext
 } $CLASS
 
-#CLASS 0
+#CLASS 0} _MoveMe#CLASS 0

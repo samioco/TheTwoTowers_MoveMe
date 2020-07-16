@@ -1,4 +1,4 @@
-#CLASS 0
+//RESET_MoveMeSettings#CLASS 0#AL RESET_MoveMeSettings {#CLASS 0
 $CLASS = "Tools|MoveMe|Settings"
 
 #TR MoveMe_Sight_Check {{@Messages_Sight_On}} {#T- MoveMe_Sight_Check;#T- MoveMe_NoCrystal;ActionNext} $CLASS
@@ -59,4 +59,4 @@ ActionNext
 
 
 #CLASS $CLASS 0
-#CLASS 0
+#CLASS 0} _MoveMe#CLASS 0

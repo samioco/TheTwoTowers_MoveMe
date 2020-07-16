@@ -1,4 +1,4 @@
-#CLASS 0
+//RESET_MoveMeLairWalk#CLASS 0#AL RESET_MoveMeLairWalk {#CLASS 0
 #VAR LairWalkDest {} {} VAR
 
 #VAR Shelob_Rooms {} {} VAR
@@ -60,4 +60,4 @@ ClassOff ShelobsLair_Walk
 #TR {~[ You have completed a quest:%s*%s~]} {ClassOff ShelobsLair_Walk;#STOP} $CLASS
 #TR {@ROOMS_Signposts} {ClassOff ShelobsLair_Walk} $CLASS
 ClassOff ShelobsLair_Walk
-#CLASS 0
+#CLASS 0} _MoveMe#CLASS 0
