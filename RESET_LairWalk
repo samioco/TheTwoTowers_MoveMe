@@ -1,0 +1,63 @@
+#CLASS 0
+#VAR LairWalkDest {} {} VAR
+
+#VAR Shelob_Rooms {} {} VAR
+#ADDI Shelob_Rooms "A tunnel|An intersection"
+#ADDI Shelob_Rooms "A fork|Main tunnel"
+#ADDI Shelob_Rooms "An opening"
+#ADDI Shelob_Rooms "A dead end"
+#ADDI Shelob_Rooms "A dead-end"
+#ADDI Shelob_Rooms "Shelob's lair"
+#ADDI Shelob_Rooms "A large tunnel"
+#ADDI Shelob_Rooms "A rock-filled cave"
+#ADDI Shelob_Rooms "A niche in the wall"
+#ADDI Shelob_Rooms "A ledge"
+#ADDI Shelob_Rooms "East end of the main tunnel"
+#ADDI Shelob_Rooms "The underway"
+#ADDI Shelob_Rooms "Outside a stone door"
+#ADDI Shelob_Rooms "Inside the entrance to the underway"
+#ADDI Shelob_Rooms "The underway"
+#ADDI Shelob_Rooms "Underway"
+#ADDI Shelob_Rooms "The Undergate of Cirith Ungol"
+#ADDI Shelob_Rooms "A cave"
+#ADDI Shelob_Rooms "Entrance room"
+#ADDI Shelob_Rooms "A rock-filled cave"
+
+$CLASS = "Tools|MoveMe|ShelobsLair_Walk"
+
+#AL LairStop {
+#STOP
+StopWalk
+#T- ShelobWalk_Block
+} $CLASS
+
+#AL LairWalk {
+LairStop
+ActionClear
+$dest=""
+#SW (%0) {#VAR LairWalkDest {%0} {} VAR}
+#ECHO LairWalking to: @LairWalkDest
+QuestOn ShelobsLair_Walk
+#T+ ShelobWalk_Block
+#STOP
+#CALL %walkmode(1)
+#SLOW %pathfrom(,@LairWalkDest)
+} $CLASS
+$CLASS = "Tools|MoveMe|ShelobsLair_Walk|Settings"
+
+#TR ShelobWalk_Block {{@Messages_ShelobsLair_BlockedMovement}} {
+#STOP
+#ECHO Walking Blocked.
+#WAIT 200
+#SLOW %pathfrom(,@LairWalkDest)
+} $CLASS
+
+#TR {{@ROOMS_Signposts}} {
+ClassOff ShelobsLair_Walk
+#STOP
+} $CLASS
+
+#TR {~[ You have completed a quest:%s*%s~]} {ClassOff ShelobsLair_Walk;#STOP} $CLASS
+#TR {@ROOMS_Signposts} {ClassOff ShelobsLair_Walk} $CLASS
+ClassOff ShelobsLair_Walk
+#CLASS 0
