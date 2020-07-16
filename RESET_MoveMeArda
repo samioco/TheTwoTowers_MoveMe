@@ -1,0 +1,114 @@
+#CLASS 0
+$CLASS = "Tools|MoveMe|EXE"
+
+#AL MoveMe_To_WestArda {
+$LastSP=%lower(@LastSP)
+#SW (((%ismember($LastSP,%lower(@ROOMS_Signposts_FH_ID))) AND (!%pos("Outpost",%zonename()))) OR ((%ismember(@LastSP,@ROOMS_Signposts_Arda)) AND (%pos("Tarzhayan",%zonename())))) {
+ActionAdd "MoveMe_To_WestArda"
+ActionAdd "#WALK NOUT;ActionNext"
+MoveMe_To_Arda
+} (%ismember($LastSP,%lower(@ROOMS_Signposts_Arda_ID))) {
+  #IF (@MyCoordination<=70) {ActionAdd "#WALK EntE;#WALK EntW;ActionNext"}
+  #IF ((%ismember($LastSP,%lower("PelSP|LinSP|Nkad|Skad|Nout|Sout|DhSP|CorSP"))) && (!%ismember(@MyPublicAlign,@Alignments_Evil))) {ActionAdd "#WALK PelSP;#WALK MTSP;ActionNext"}
+  #IF ((%ismember($LastSP,%lower("Morg"))) AND (!%ismember(@MyPublicAlign,@Alignments_Evil))) {ActionAdd "#WALK SUN;#WALK Entwade;ActionNext"}
+  ActionNext
+} {ActionNext}
+} $CLASS
+
+#AL MoveMe_To_Arda {
+$LastSP=%lower(@LastSP)
+#SW ((%ismember($LastSP,@ROOMS_Signposts_FH_ID)) && (!%pos("Outpost",%zonename()))) {
+ActionAdd "#T- Caravan_Arrival;ClassOff MoveMe;ActionNext"
+ClassOn MoveMe;#T+ Caravan_Arrival;#WALK SOutGate
+} ((%ismember($LastSP,%lower("NOUT|SOUT"))) && (%pos("Tarzhayan",%zonename()))) {
+ActionAdd "#T- Caravan_Arrival;ClassOff MoveMe;ActionNext"
+ClassOn MoveMe;#T+ Caravan_Arrival;#WALK SOUTGate
+} ((%ismember($LastSP,%lower(@ROOMS_Signposts_Arda_ID))) && (%pos("Moria",%zonename()))) {
+ActionAdd "#T- MoveMe_Moria_Exit;#T- MoveMe_Moria_Enter;ClassOff MoveMe;ActionNext"
+ClassOn MoveMe;#T+ MoveMe_Moria_Exit;#WALK MoriaGate;2extinguish crystal;ES off
+} ((%ismember($LastSP,%lower(@ROOMS_Signposts_Arda_ID))) && ((%pos("Mordor",%zonename())) || (%pos("Barad-dur",%zonename())))) {
+ActionAdd "#T- Mordor_KOG;ClassOff MoveMe;ActionNext"
+ClassOn MoveMe;#T+ Mordor_KOG;#WALK Morgate
+} ((%ismember($LastSP,%lower(@ROOMS_Signposts_WestArda_ID))) && (@MyCoordination<=70)) {
+#WALK DruSP;#WALK EntW;#WALK EntE;ActionNext
+} {ActionNext}
+} $CLASS
+
+
+#AL MoveMe_To_Moria {
+$LastSP=%lower(@LastSP)
+$RoomID=%lower(%roomid())
+$ZoneName=%lower(%zonename())
+#SW ((!%pos("moria",$ZoneName)) && ($LastSP!="loth")) {
+ActionAdd "MoveMe_To_Moria"
+MoveMe_To_Loth
+} ((!%pos("moria",$ZoneName)) && ($RoomID!=%lower("moria"))) {
+ActionAdd "MoveMe_To_Moria"
+ClassOn MoveMe;#T+ MoveMe_Moria_Enter;#WALK Moria
+} (($RoomID=%lower("moria")) || (%pos("first hall",$ZoneName))) {
+ActionAdd "ClassOff MoveMe;#T- MoveMe_MoriaOrc;#T- MoveMe_MoriaOrc_NotThere;#T- MoveMe_MoriaOrc_NoBribe;#T- MoveMe_Moria_Inside;ActionNext"
+ActionAdd "ClassOn MoveMe;#T+ MoveMe_MoriaOrc_NotThere;#T+ MoveMe_MoriaOrc;#T+ MoveMe_MoriaOrc_NoBribe;look orc"
+ActionAdd "ClassOn MoveMe;#WALK MoriaOrc;ActionNext"
+ClassOn MoveMe;#T+ MoveMe_Sight_Check;#T+ MoveMe_NoCrystal;CrystalOn;light crystal
+} {ActionNext}
+} $CLASS
+
+#AL MoveMe_To_Mordor {
+#SW ((!%ismember(@LastSP,@ROOMS_Signposts_Arda_ID)) && (%pos("Tarzhayan",%zonename())) || (%ismember(@LastSP,@ROOMS_Signposts_WestArda_ID))) {
+ActionAdd "MoveMe_To_Mordor"
+MoveMe_To_Arda
+} (!%pos("Mordor",%zonename())) {
+ActionAdd "#T- Mordor_KOG;ClassOn MoveMe;ActionNext"
+ClassOn MoveMe;#T+ Mordor_KOG;#WALK MorIn
+} {ActionNext}
+} $CLASS
+
+
+//MoveMe_To_NorthArda: Meant as an action Queue setup for northern signposts
+#AL MoveMe_To_NorthArda {
+$LastSP=%lower(@LastSP)
+//If Gondor signpost detected and not evil, avoid Osgiliath via MtSP west of Osgiliath
+#SW ((%ismember($LastSP,%lower("PelSP|LinSP"))) AND (!%ismember(@MyPublicAlign,@Alignments_Evil))) {
+  ActionAdd "#WALK MTSP;#WALK EdoSP;#WALK SUN;ActionNext"
+//If South Arda signpost detected and not evil, avoid Osgiliath via Morg bridge / South Undeep
+} ((%ismember($LastSP,%lower("NKAD|SKAD|NOUT|SOUT|DHSP|CorSP"))) && (!%ismember(%lower(@MyPublicAlign),%lower(@Alignments_Evil)))) {
+  ActionAdd "#WALK Morg;#WALK Sun;ActionNext"
+//If Morg bridge signpost detected and not evil, avoid Osgiliath via South Undeep
+} ((%ismember($LastSP,%lower("Morg"))) AND (!%ismember(@MyPublicAlign,@Alignments_Evil))) {
+  ActionAdd "#WALK SUN;ActionNext"
+}
+MoveMe_To_Arda
+} $CLASS
+
+#AL MoveMe_To_Loth {
+ActionAdd "#WALK Loth;ActionNext"
+MoveMe_To_NorthArda
+} $CLASS
+
+#AL MoveMe_To_Rhos {
+ActionAdd "#WALK Rhos;ActionNext"
+MoveMe_To_NorthArda
+} $CLASS
+
+#AL MoveMe_To_Caras {
+#SW (%ismember(%lower(@MyPublicAlign),%lower(@Alignments_Moral))) {ActionAdd "#WALK Caras;ActionNext"
+} {ActionAdd "#WALK CaraSecretCave;#WALK CaladsHouse;ActionNext"}
+MoveMe_To_Loth
+} $CLASS
+
+#AL MoveMe_To_SouthArda {
+$LastSP=%lower(@LastSP)
+#SW (%ismember($LastSP,%lower("Morg"))) {
+ActionAdd "#WALK Morg;#WALK NKAD;ActionNext"
+} (%ismember($LastSP,%lower("Rhos|Thran|IHSP|ALSP|DGSP|Loth|EdoSP"))) {
+ActionAdd "#WALK EdoSP;#WALK MTSP;ActionNext"
+}
+MoveMe_To_Arda
+} $CLASS
+
+#AL MoveMe_To_MT {
+ActionAdd "#T+ MoveMe|MinasTirithInside;#WALK MTIN"
+MoveMe_To_SouthArda
+} $CLASS
+
+#CLASS 0

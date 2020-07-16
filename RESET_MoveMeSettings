@@ -1,0 +1,62 @@
+#CLASS 0
+$CLASS = "Tools|MoveMe|Settings"
+
+#TR MoveMe_Sight_Check {{@Messages_Sight_On}} {#T- MoveMe_Sight_Check;#T- MoveMe_NoCrystal;ActionNext} $CLASS
+#T- MoveMe_Sight_Check
+
+#TR MoveMe_NoCrystal {You don't see crystal to light.} {#T- MoveMe_NoCrystal;SIGHT ON} $CLASS
+#T- MoveMe_NoCrystal
+
+#TR MinasTirithInside {Inside the gates of Minas Tirith} {
+#T- MinasTirithInside
+ClassOff MoveMe
+ActionNext
+} $CLASS
+
+#TR MoveMe_Moria_Enter {You heave with all your might and manage to open the gates.} {
+ActionNext
+} $CLASS
+#T- MoveMe_Moria_Enter
+
+#TR MoveMe_Moria_Exit {You put all your weight against the gates and manage to get them closed.} {
+#T- MoveMe_Moria_Exit
+ClassOff MoveMe
+ActionNext
+} $CLASS
+#T- MoveMe_Moria_Exit
+
+#TR MoveMe_MoriaOrc {Some orcs have been known to accept bribes. You wonder if this} {#T- MoveMe_MoriaOrc;#T- MoveMe_MoriaOrc_NotThere;#T+ MoveMe_Moria_Inside;bribe orc} $CLASS
+#T- MoveMe_MoriaOrc
+
+#TR MoveMe_MoriaOrc_NotThere {You don't see that here.} {#IF (%roomid="mororc") {#T- MoveMe_MoriaOrc_NotThere;#T- MoveMe_MoriaOrc;#T+ MoveMe_Moria_Inside;#WALK MoriaIn}} $CLASS
+#T- MoveMe_MoriaOrc_NotThere
+
+#TR MoveMe_MoriaOrc_NoBribe {The orc looks you up and down, and growls.} {#IF (%mud.ep<100) {GNB;withdraw 100;ActionNext} {#WALK MoriaIn}} $CLASS
+#T- MoveMe_MoriaOrc_NoBribe
+
+#TR MoveMe_Moria_Inside {{"With a disgusting grin, the orc escorts you safely across the bridge.|With great caution, you slowly make your way across the bridge."}} {
+ClassOff MoveMe
+ActionNext
+} $CLASS
+#T- MoveMe_Moria_Inside
+
+
+
+#TR Tarwell_Arrival {You reach the} {#T- Tarwell_Arrival;#T- Tarwell_DigOut;ClassOff MoveMe;ActionNext} $CLASS
+#T- Tarwell_Arrival
+
+#TR Tarwell_DigOut {your cLothes and join the traffic.} {#T- Tarwell_Arrival;#T- Tarwell_DigOut;ClassOff MoveMe;ActionNext} $CLASS
+#T- Tarwell_DigOut
+
+#TR MoveMe_CaravanArrival {The caravan arrives safely and in fair condition.} {#T- Caravan_Arrival;ClassOff MoveMe;ActionNext} $CLASS
+#T- Caravan_Arrival
+
+#TR Mordor_KOG {You decide that it's too late to return and enter the gate...} {#T- Mordor_KOG;ClassOff MoveMe;ActionNext} $CLASS
+#T- Mordor_KOG
+
+#TR {~[ You have completed a quest:%s*%s~]} {ClassOff MoveMe;#STOP} $CLASS
+
+
+
+#CLASS $CLASS 0
+#CLASS 0

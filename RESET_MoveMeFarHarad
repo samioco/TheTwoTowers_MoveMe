@@ -1,0 +1,42 @@
+#CLASS 0
+$CLASS = "Tools|MoveMe|EXE"
+#VAR ROOMS_Tarzhayan_Well {"tarwell_inside|tarwell_bottom|rabban|rabban_tunnel|rabban_lizard|rabban_lizard|tarwell_sand"} {} VAR
+
+#AL MoveMe_To_FH {
+$LastSP=%lower(@LastSP)
+
+#SW (%ismember($LastSP,%lower(@ROOMS_Signposts_WestArda_ID))) {
+ActionAdd "MoveMe_To_FH"
+MoveMe_To_Arda
+//If LastSP is Not FH AND Not Tarzhayan, Move Caravan TarCourt
+} ((!%ismember($LastSP,%lower(@ROOMS_Signposts_FH_ID))) AND (!%pos("Tarzhayan",%zonename()))) {
+BotOn MoveMe;#T+ Caravan_Arrival;#WALK TarCourt
+//If LastSP is FH And Outpost Zone, Move TarCourt
+} ((%ismember($LastSP,%lower("TarSP"))) AND (%pos("Outpost",%zonename()))) {
+BotOn MoveMe;#T+ Caravan_Arrival;#WALK TarCourt
+} {#T- Caravan_Arrival;BotOff MoveMe;ActionNext
+}
+} $CLASS
+
+
+#AL MoveMe_To_Rabban {
+$RoomID=%lower(%roomid())
+$ZoneName=%lower(%zonename())
+#SW ((!%pos(%lower("Tarzhayan Well"),$ZoneName)) && (%pos("tarzhayan",$ZoneName))) {
+ActionAdd "BotOn MoveMe;#T+ Tarwell_Arrival;#WALK Rabban"
+} {#T- Tarwell_Arrival;#T- Tarwell_DigOut;BotOff MoveMe
+}
+MoveMe_To_FH
+} $CLASS
+
+#AL MoveMe_From_Rabban {
+$RoomID=%lower(%roomid())
+$ZoneName=%lower(%zonename())
+#SW (%pos(%lower("Tarzhayan Well"),$ZoneName)) {
+ActionAdd "BotOn MoveMe;#T+ Tarwell_Arrival;#T+ Tarwell_DigOut;#WALK TarWell"
+} {#T- Tarwell_Arrival;#T- Tarwell_DigOut;BotOff MoveMe
+}
+ActionNext
+} $CLASS
+
+#CLASS 0
